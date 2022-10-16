@@ -1,5 +1,3 @@
-# Модули
-
 Модуль - файл, содержащий `import` или `export` верхнего уровня.
 Файл, не содержащий указанных ключевых слов, является глобальным скриптом.
 
@@ -11,14 +9,9 @@
 - CommonJS
 - ES
  
-##  синтаксис: 
-```
+#  Cинтаксис: 
 
-export default function helloWorld() {
-console.log('Привет, народ!') 
-}
-
-```
+## Es syntax
 
 `import hello from './hello.js' hello()`
 
@@ -51,7 +44,7 @@ const positivePhi = math.absolute(math.phi)
 
 ```
 
-# внутренние модули в тс
+# Модули в TS
 
 Типы в TS могут экспортироваться и импортироваться с помощью такого же синтаксиса, что и значения в JS:
 
@@ -59,17 +52,128 @@ const positivePhi = math.absolute(math.phi)
 
 `import { Cat } from './animal.js'`
 
-# Синтаксис Common-JS, AMD - внешние модули
+TypeScript имеет ключевые слова `module` и `namespace`. Они называются внутренними модулями:
 
-`CommonJS` — шаблон для определения и использования модулей. Он встроен в Node.js.
+```
+    module Counter {
+        let count = 0
+        export const increase = () => ++count
+        export const reset = () => {
+            count = 0
+            console.log('Счетчик сброшен.')
+        }
+    }
 
-`AMD (Асинхронное определение модуля)` -  одна из самых старых модульных систем, изначально реализована библиотекой require.js
+    namespace Counter {
+        let count = 0
+        export const increase = () => ++count
+        export const reset = () => {
+            count = 0
+            console.log('Счетчик сброшен.')
+        }
+    }
+```
+
+
+```
+
+export default function helloWorld() {
+console.log('Привет, народ!') 
+}
+
+```
+
+
+# Синтаксис Common-JS, AMD.
+
+## CommonJs
+
+`CommonJS` — шаблон для определения и использования модулей. Он встроен в Node.js. По умолчанию каждый JS файл — это CJS.
+
+CommonJS, первоначально названный ServerJS, это шаблон для определения и использования модулей. Он встроен в Node.js. По умолчанию каждый JS файл — это CJS. Переменные `module` и `exports` обеспечивают экспорт модуля (файла). Функция `require` обеспечивает загрузку и использование модуля. Следующий код демонстрирует определение модуля счетчика на синтаксисе CommonJS:  
+  
+
+```
+    // определяем CommonJS модуль: commonJSCounterModule.js
+    const dependencyModule1 = require('./dependencyModule1')
+    const dependencyModule2 = require('./dependencyModule2')
+
+    let count = 0
+    const increase = () => ++count
+    const reset = () => {
+        count = 0
+        console.log('Счетчик сброшен.')
+    }
+
+    exports.increase = increase
+    exports.reset = reset
+    // или (эквивалентно)
+    module.exports = {
+        increase,
+        reset
+    }
+```
+
+  
+Вот как этот модуль используется:  
+  
+
+```
+    // используем CommonJS модуль
+    const {
+        increase,
+        reset
+    } = require('./commonJSCounterModule')
+    increase()
+    reset()
+    // или
+    const commonJSCounterModule = require('./commonJSCounterModule')
+    commonJSCounterModule.increase()
+    commonJSCounterModule.reset()
+```
+
+## AMD
+
+`AMD (Асинхронное определение модуля)` -  из самых старых модульных систем, изначально реализована библиотекой require.js
+
+
+```
+    // определяем AMD модуль
+    define('amdCounterModule', ['dependencyModule1', 'dependencyModule2'], (dependencyModule1, dependencyModule2) => {
+        let count = 0
+        const increase = () => ++count
+        const reset = () => {
+            count = 0
+            console.log('Счетчик сброшен.')
+        }
+
+        return {
+            increase,
+            reset
+        }
+    })
+```
+
+  
+Он также содержит функцию `require` для использования модуля:  
+  
+
+```
+    // используем AMD модуль
+    require(['amdCounterModule'], amdCounterModule => {
+        amdCounterModule.increase()
+        amdCounterModule.reset()
+    })
+
+```
+
+  
+`require` AMD отличается от `require` CommonJS тем, что в качестве аргументов функции принимает названия модулей и сами модули.
 
 Оба имеют концепт одного объекта, содержащего всего "экспорты" модуля.
 
 TypeScript поддерживает `export =` синтаксис, характерный для воркфлоу CommonJS и AMD для экспорта одного объекта. 
 
-   
 
 ```
 let numberRegexp = /^[0-9]+$/;

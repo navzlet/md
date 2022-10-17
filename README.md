@@ -75,15 +75,6 @@ TypeScript имеет ключевые слова `module` и `namespace`. О
 ```
 
 
-```
-
-export default function helloWorld() {
-console.log('Привет, народ!') 
-}
-
-```
-
-
 # Синтаксис Common-JS, AMD.
 
 ## CommonJs

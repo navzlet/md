@@ -26,7 +26,7 @@
 // Класс пультов имеет ссылку на устройство, которым управляет.
 // Методы этого класса делегируют работу методам связанного
 // устройства.
-class Remote is
+`class Remote is
 protected field device: Device
 constructor Remote(device: Device) is
 this.device = device
@@ -42,38 +42,38 @@ device.setVolume(device.getVolume() + 10)
 method channelDown() is
 device.setChannel(device.getChannel() - 1)
 method channelUp() is
-device.setChannel(device.getChannel() + 1)
+device.setChannel(device.getChannel() + 1)`
 
 // Вы можете расширять класс пультов, не трогая код устройств.
-class AdvancedRemote extends Remote is
+`class AdvancedRemote extends Remote is
 method mute() is
-device.setVolume(0)
+device.setVolume(0)`
 
 // Все устройства имеют общий интерфейс. Поэтому с ними может
 // работать любой пульт.
-interface Device is
+`interface Device is
 method isEnabled()
 method enable()
 method disable()
 method getVolume()
 method setVolume(percent)
 method getChannel()
-method setChannel(channel)
+method setChannel(channel)`
 
 // Но каждое устройство имеет особую реализацию.
-class Tv implements Device is
-// ...
+`class Tv implements Device is
+// ...`
 
-class Radio implements Device is
-// ...
+`class Radio implements Device is
+// ...`
 
 // Где-то в клиентском коде.
-tv = new Tv()
+`tv = new Tv()
 remote = new Remote(tv)
-remote.togglePower()
+remote.togglePower()`
 
-radio = new Radio()
-remote = new AdvancedRemote(radio)
+`radio = new Radio()
+remote = new AdvancedRemote(radio)`
 
 ============
 
@@ -84,7 +84,7 @@ remote = new AdvancedRemote(radio)
 //классов. Она содержит ссылку на объект из иерархии Реализации и делегирует
 //ему всю настоящую работу.
 
-class Abstraction {
+`class Abstraction {
     protected implementation: Implementation;
 
     constructor(implementation: Implementation) {
@@ -95,17 +95,17 @@ class Abstraction {
         const result = this.implementation.operationImplementation();
         return `Abstraction: Base operation with:\n${result}`;
     }
-}
+}`
 
 
 //Можно расширить Абстракцию без изменения классов Реализации.
 
-class ExtendedAbstraction extends Abstraction {
+`class ExtendedAbstraction extends Abstraction {
     public operation(): string {
         const result = this.implementation.operationImplementation();
         return `ExtendedAbstraction: Extended operation with:\n${result}`;
     }
-}
+}`
 
 
 //Реализация устанавливает интерфейс для всех классов реализации. Он не должен
@@ -114,25 +114,25 @@ class ExtendedAbstraction extends Abstraction {
 //примитивные операции, в то время как Абстракция определяет операции более
 //высокого уровня, основанные на этих примитивах.
 
-interface Implementation {
+`interface Implementation {
     operationImplementation(): string;
-}
+}`
 
 
 //Каждая Конкретная Реализация соответствует определённой платформе и реализует
 //интерфейс Реализации с использованием API этой платформы.
 
-class ConcreteImplementationA implements Implementation {
+`class ConcreteImplementationA implements Implementation {
     public operationImplementation(): string {
         return 'ConcreteImplementationA: Here\'s the result on the platform A.';
     }
-}
+}`
 
-class ConcreteImplementationB implements Implementation {
+`class ConcreteImplementationB implements Implementation {
     public operationImplementation(): string {
         return 'ConcreteImplementationB: Here\'s the result on the platform B.';
     }
-}
+}`
 
 
 //За исключением этапа инициализации, когда объект Абстракции связывается с
@@ -140,19 +140,19 @@ class ConcreteImplementationB implements Implementation {
 //класса Абстракции. Таким образом, клиентский код может поддерживать любую
 //комбинацию абстракции и реализации.
 
-function clientCode(abstraction: Abstraction) {
+`function clientCode(abstraction: Abstraction) {
     // ..
 
     console.log(abstraction.operation());
 
     // ..
-}
+}`
 
 
 //Клиентский код должен работать с любой предварительно сконфигурированной
 //комбинацией абстракции и реализации.
 
-let implementation = new ConcreteImplementationA();
+`let implementation = new ConcreteImplementationA();
 let abstraction = new Abstraction(implementation);
 clientCode(abstraction);
 
@@ -160,7 +160,7 @@ console.log('');
 
 implementation = new ConcreteImplementationB();
 abstraction = new ExtendedAbstraction(implementation);
-clientCode(abstraction);
+clientCode(abstraction);`
 
 =============
 

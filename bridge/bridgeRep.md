@@ -79,90 +79,82 @@ remote = new AdvancedRemote(radio)
 
 пример кода:
 
-/\*\*
 
-- Абстракция устанавливает интерфейс для «управляющей» части двух иерархий
-- классов. Она содержит ссылку на объект из иерархии Реализации и делегирует
-- ему всю настоящую работу.
-  \*/
-  class Abstraction {
-  protected implementation: Implementation;
+//Абстракция устанавливает интерфейс для «управляющей» части двух иерархий
+//классов. Она содержит ссылку на объект из иерархии Реализации и делегирует
+//ему всю настоящую работу.
 
-      constructor(implementation: Implementation) {
-          this.implementation = implementation;
-      }
+class Abstraction {
+    protected implementation: Implementation;
 
-      public operation(): string {
-          const result = this.implementation.operationImplementation();
-          return `Abstraction: Base operation with:\n${result}`;
-      }
+    constructor(implementation: Implementation) {
+        this.implementation = implementation;
+    }
 
-  }
+    public operation(): string {
+        const result = this.implementation.operationImplementation();
+        return `Abstraction: Base operation with:\n${result}`;
+    }
+}
 
-/\*\*
 
-- Можно расширить Абстракцию без изменения классов Реализации.
-  \*/
-  class ExtendedAbstraction extends Abstraction {
-  public operation(): string {
-  const result = this.implementation.operationImplementation();
-  return `ExtendedAbstraction: Extended operation with:\n${result}`;
-  }
-  }
+//Можно расширить Абстракцию без изменения классов Реализации.
 
-/\*\*
+class ExtendedAbstraction extends Abstraction {
+    public operation(): string {
+        const result = this.implementation.operationImplementation();
+        return `ExtendedAbstraction: Extended operation with:\n${result}`;
+    }
+}
 
-- Реализация устанавливает интерфейс для всех классов реализации. Он не должен
-- соответствовать интерфейсу Абстракции. На практике оба интерфейса могут быть
-- совершенно разными. Как правило, интерфейс Реализации предоставляет только
-- примитивные операции, в то время как Абстракция определяет операции более
-- высокого уровня, основанные на этих примитивах.
-  \*/
-  interface Implementation {
-  operationImplementation(): string;
-  }
 
-/\*\*
+//Реализация устанавливает интерфейс для всех классов реализации. Он не должен
+//соответствовать интерфейсу Абстракции. На практике оба интерфейса могут быть
+//совершенно разными. Как правило, интерфейс Реализации предоставляет только
+//примитивные операции, в то время как Абстракция определяет операции более
+//высокого уровня, основанные на этих примитивах.
 
-- Каждая Конкретная Реализация соответствует определённой платформе и реализует
-- интерфейс Реализации с использованием API этой платформы.
-  \*/
-  class ConcreteImplementationA implements Implementation {
-  public operationImplementation(): string {
-  return 'ConcreteImplementationA: Here\'s the result on the platform A.';
-  }
-  }
+interface Implementation {
+    operationImplementation(): string;
+}
+
+
+//Каждая Конкретная Реализация соответствует определённой платформе и реализует
+//интерфейс Реализации с использованием API этой платформы.
+
+class ConcreteImplementationA implements Implementation {
+    public operationImplementation(): string {
+        return 'ConcreteImplementationA: Here\'s the result on the platform A.';
+    }
+}
 
 class ConcreteImplementationB implements Implementation {
-public operationImplementation(): string {
-return 'ConcreteImplementationB: Here\'s the result on the platform B.';
+    public operationImplementation(): string {
+        return 'ConcreteImplementationB: Here\'s the result on the platform B.';
+    }
 }
+
+
+//За исключением этапа инициализации, когда объект Абстракции связывается с
+//определённым объектом Реализации, клиентский код должен зависеть только от
+//класса Абстракции. Таким образом, клиентский код может поддерживать любую
+//комбинацию абстракции и реализации.
+
+function clientCode(abstraction: Abstraction) {
+    // ..
+
+    console.log(abstraction.operation());
+
+    // ..
 }
 
-/\*\*
 
-- За исключением этапа инициализации, когда объект Абстракции связывается с
-- определённым объектом Реализации, клиентский код должен зависеть только от
-- класса Абстракции. Таким образом, клиентский код может поддерживать любую
-- комбинацию абстракции и реализации.
-  \*/
-  function clientCode(abstraction: Abstraction) {
-  // ..
+//Клиентский код должен работать с любой предварительно сконфигурированной
+//комбинацией абстракции и реализации.
 
-      console.log(abstraction.operation());
-
-      // ..
-
-  }
-
-/\*\*
-
-- Клиентский код должен работать с любой предварительно сконфигурированной
-- комбинацией абстракции и реализации.
-  \*/
-  let implementation = new ConcreteImplementationA();
-  let abstraction = new Abstraction(implementation);
-  clientCode(abstraction);
+let implementation = new ConcreteImplementationA();
+let abstraction = new Abstraction(implementation);
+clientCode(abstraction);
 
 console.log('');
 
@@ -170,12 +162,7 @@ implementation = new ConcreteImplementationB();
 abstraction = new ExtendedAbstraction(implementation);
 clientCode(abstraction);
 
-Выполнение программы:
-Abstraction: Base operation with:
-ConcreteImplementationA: Here's the result on the platform A.
-
-ExtendedAbstraction: Extended operation with:
-ConcreteImplementationB: Here's the result on the platform B.
+=============
 
 Данный структурный паттерн полезен когда нужно расширять класс в независимых плоскостях. Он особенно полезен когда нужно делать кросс-платформенные приложения,
 поддерживать несколько типов бд.

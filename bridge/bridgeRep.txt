@@ -15,67 +15,50 @@
 
 ==============
 
-Пример псевдокода
+Пример простого кода
 
-// Класс пультов имеет ссылку на устройство, которым управляет.
-// Методы этого класса делегируют работу методам связанного
-// устройства.
-class Remote is
-    protected field device: Device
-    constructor Remote(device: Device) is
-        this.device = device
-    method togglePower() is
-        if (device.isEnabled()) then
-            device.disable()
-        else
-            device.enable()
-    method volumeDown() is
-        device.setVolume(device.getVolume() - 10)
-    method volumeUp() is
-        device.setVolume(device.getVolume() + 10)
-    method channelDown() is
-        device.setChannel(device.getChannel() - 1)
-    method channelUp() is
-        device.setChannel(device.getChannel() + 1)
+class Remote {
+    device: Device;
+    constructor(device: Device) {
+        this.device = device;
+    }
+    public togglePower() {
+        if(this.device.isEnabled){
+            this.device.disable()
+        }
+        else{
+            this.device.enable()
+        }
+    }
+}
 
-
-// Вы можете расширять класс пультов, не трогая код устройств.
-class AdvancedRemote extends Remote is
-    method mute() is
-        device.setVolume(0)
+interface Device {
+    isEnabled: boolean;
+    disable(): void;
+    enable(): void;
+}
 
 
-// Все устройства имеют общий интерфейс. Поэтому с ними может
-// работать любой пульт.
-interface Device is
-    method isEnabled()
-    method enable()
-    method disable()
-    method getVolume()
-    method setVolume(percent)
-    method getChannel()
-    method setChannel(channel)
+class Tv implements Device {
+    isEnabled = false;
+    disable(){
+        this.isEnabled = false;
+        return console.log('device is disabled')
+    }
+    enable(){
+        this.isEnabled = true;
+        return console.log('device is enabled')
+    }
+}
 
-
-// Но каждое устройство имеет особую реализацию.
-class Tv implements Device is
-    // ...
-
-class Radio implements Device is
-    // ...
-
-
-// Где-то в клиентском коде.
-tv = new Tv()
-remote = new Remote(tv)
-remote.togglePower()
-
-radio = new Radio()
-remote = new AdvancedRemote(radio)
+const tv = new Tv;
+const tvRemote = new Remote(tv);
+tvRemote.togglePower()
+tvRemote.togglePower()
 
 ============
 
-пример кода:
+пример абстрактного кода:
 
 /**
  * Абстракция устанавливает интерфейс для «управляющей» части двух иерархий
